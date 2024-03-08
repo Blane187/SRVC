@@ -150,14 +150,14 @@ with gr.Blocks(theme='Hev832/EasyAndCool') as app:
     #     # btn_enhance_audio.click(fn=audio_enhance, inputs=[enhance_input_audio], outputs=[enhance_output_audio])
         
         
-    with gr.Tab("Modelos"):
-        gr.HTML("<h4>Buscar modelos</h4>")
+    with gr.Tab("models"):
+        gr.HTML("<h4>dowoad models</h4>")
         search_name = gr.Textbox(placeholder="Billie Eillish (RVC v2 - 100 epoch)", label="Nombre", show_label=True)
          # Salida
         with gr.Row():
-            sarch_output = gr.Markdown(label="Salida")
+            sarch_output = gr.Markdown(label="search")
             
-        btn_search_model = gr.Button(value="Buscar")
+        btn_search_model = gr.Button(value="download")
         btn_search_model.click(fn=search_model, inputs=[search_name], outputs=[sarch_output])
         
         gr.HTML("<h4>Publica tu modelo</h4>")
@@ -226,4 +226,4 @@ with gr.Blocks(theme='Hev832/EasyAndCool') as app:
     
     
     #share=True
-app.queue(concurrency_count=200, max_size=1022).launch()
+app.queue(concurrency_count=200, max_size=1022).launch(share=True)
