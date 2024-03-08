@@ -228,7 +228,7 @@ with gr.Blocks(theme='Hev832/EasyAndCool') as app:
     #share=True
 
 
-if (
+    if (
         config.iscolab or config.paperspace
     ):  # Share gradio link for colab and paperspace (FORK FEATURE)
         app.queue(concurrency_count=200, max_size=1022).launch(debug=True, Share=True)
