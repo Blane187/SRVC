@@ -12,10 +12,10 @@ from pydub import AudioSegment
 
 def convert_yt_to_wav(url):
     if not url:
-        return "Primero introduce el enlace del video", None
+        return "First, introduce the video link", None
     
     try:
-        print(f"Convirtiendo video {url}...")
+        print(f"Converting video {url}...")
         # Descargar el video utilizando pytube
         video = pytube.YouTube(url)
         stream = video.streams.filter(only_audio=True).first()
@@ -39,43 +39,43 @@ def convert_yt_to_wav(url):
             
         return "Success", audio_file_path
     except ConnectionResetError as cre:
-        return "Se ha perdido la conexión, recarga o reintentalo nuevamente más tarde.", None
+        return "The connection has been lost, please reload or try again later.", None
     except Exception as e:
         return str(e), None
     
-with gr.Blocks() as app:
-    gr.HTML("<h1> Simple RVC Inference - by Juuxn 💻 </h1>")
+with gr.Blocks(theme='Hev832/EasyAndCool') as app:
+    gr.HTML("<h1> Simple RVC Inference Juuxn X Blane 💻 </h1>")
     
-    gr.HTML("<h4> El espacio actual usa solo cpu, así que es solo para inferencia. Se recomienda duplicar el espacio para no tener problemas con las colas de procesamiento. </h4>")
     
-    gr.Markdown("Simple RVC GPU Inference on colab: [![Open In Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)](https://colab.research.google.com/drive/1NKqqTR04HujeBxzwe7jbYEvNi8LbxD_N?usp=sharing)")
-    gr.Markdown(
-        "[![Duplicate this Space](https://huggingface.co/datasets/huggingface/badges/raw/main/duplicate-this-space-sm-dark.svg)](https://huggingface.co/spaces/juuxn/SimpleRVC?duplicate=true)\n\n"
-    ) 
     
-    gr.Markdown("Recopilación de modelos que puedes usar: RVC + Kits ai. **[RVC Community Models](https://docs.google.com/spreadsheets/d/1owfUtQuLW9ReiIwg6U9UkkDmPOTkuNHf0OKQtWu1iaI)**")
+#    gr.Markdown("Simple RVC GPU Inference on colab: [![Open In Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)](https://colab.research.google.com/drive/1NKqqTR04HujeBxzwe7jbYEvNi8LbxD_N?usp=sharing)")
+#    gr.Markdown(
+#        "[![Duplicate this Space](https://huggingface.co/datasets/huggingface/badges/raw/main/duplicate-this-space-sm-dark.svg)](https://huggingface.co/spaces/juuxn/SimpleRVC?duplicate=true)\n\n"
+#    ) 
     
-    with gr.Tab("Inferencia"):
+    gr.Markdown("Compilation of models that you can use: RVC + Kits ai. **[RVC Community Models](https://docs.google.com/spreadsheets/d/1owfUtQuLW9ReiIwg6U9UkkDmPOTkuNHf0OKQtWu1iaI)**")
+    
+    with gr.Tab("inference"):
         model_url = gr.Textbox(placeholder="https://huggingface.co/AIVER-SE/BillieEilish/resolve/main/BillieEilish.zip", label="Url del modelo", show_label=True)
         with gr.Row():
             with gr.Column():
-                audio_path = gr.Audio(label="Archivo de audio", show_label=True, type="filepath",)
+                audio_path = gr.Audio(label="Audio file", show_label=True, type="filepath",)
                 index_rate = gr.Slider(minimum=0, maximum=1, label="Search feature ratio:", value=0.75, interactive=True,)
-                filter_radius1 = gr.Slider(minimum=0, maximum=7, label="Filtro (reducción de asperezas respiración)", value=3, step=1, interactive=True,)
+                filter_radius1 = gr.Slider(minimum=0, maximum=7, label="Filtro (smoothing out breathing)", value=3, step=1, interactive=True,)
             with gr.Column():
-                f0_method = gr.Dropdown(choices=["harvest", "pm", "crepe", "crepe-tiny", "mangio-crepe", "mangio-crepe-tiny", "rmvpe"], 
+                f0_method = gr.Dropdown(choices=[ "crepe", "crepe-tiny", "mangio-crepe", "mangio-crepe-tiny", "rmvpe"], 
                                     value="rmvpe", 
-                                    label="Algoritmo", show_label=True)
-                vc_transform0 = gr.Slider(minimum=-12, label="Número de semitonos, subir una octava: 12, bajar una octava: -12", value=0, maximum=12, step=1)
+                                    label="Algoritme", show_label=True)
+                vc_transform0 = gr.Slider(minimum=-12, label="Number of semitones, raise one octave: 12, lower one octave: -12", value=0, maximum=12, step=1)
                 protect0 = gr.Slider(
-                    minimum=0, maximum=0.5, label="Protejer las consonantes sordas y los sonidos respiratorios. 0.5 para desactivarlo.", value=0.33,
+                    minimum=0, maximum=0.5, label="Protect the voiceless consonants and the breathy sounds. 0.5 to deactivate it.", value=0.33,
                     step=0.01,
                 interactive=True,
                 )
                 resample_sr1 = gr.Slider(
                     minimum=0,
                     maximum=48000,
-                    label="Re-muestreo sobre el audio de salida hasta la frecuencia de muestreo final. 0 para no re-muestrear.",
+                    label="Resampling on the output audio up to the final sampling frequency. 0 for no resampling.",
                     value=0,
                     step=1,
                     interactive=True,
@@ -83,27 +83,27 @@ with gr.Blocks() as app:
                  
         # Salida
         with gr.Row():
-            vc_output1 = gr.Textbox(label="Salida")
-            vc_output2 = gr.Audio(label="Audio de salida")
+            vc_output1 = gr.Textbox(label="Exis")
+            vc_output2 = gr.Audio(label="Output Audio")
                             
-        btn = gr.Button(value="Convertir")
+        btn = gr.Button(value="Convert")
         btn.click(infer, inputs=[model_url, f0_method, audio_path, index_rate, vc_transform0, protect0, resample_sr1, filter_radius1], outputs=[vc_output1, vc_output2])
         
     with gr.TabItem("TTS"):
         with gr.Row():
             tts_text = gr.Textbox(
-                label="Texto:",
-                placeholder="Texto que deseas convertir a voz...",
+                label="text:",
+                placeholder="Text you want to convert to speech...",
                 lines=6,
             )
 
         with gr.Column():
             with gr.Row():
-                tts_model_url = gr.Textbox(placeholder="https://huggingface.co/AIVER-SE/BillieEilish/resolve/main/BillieEilish.zip", label="Url del modelo RVC", show_label=True)
+                tts_model_url = gr.Textbox(placeholder="https://huggingface.co/Hev832/RCV-MODELS/resolve/main/Laynz.zip?download=true", label="Url del modelo RVC", show_label=True)
                 
             with gr.Row():
-                tts_method = gr.Dropdown(choices=VOICE_METHODS, value="Edge-tts", label="Método TTS:", visible=True)
-                tts_model = gr.Dropdown(choices=EDGE_VOICES, label="Modelo TTS:", visible=True, interactive=True)
+                tts_method = gr.Dropdown(choices=VOICE_METHODS, value="Edge-tts", label="metode TTS:", visible=True)
+                tts_model = gr.Dropdown(choices=EDGE_VOICES, label="model TTS:", visible=True, interactive=True)
                 tts_api_key = gr.Textbox(label="ElevenLabs Api key", show_label=True, placeholder="4a4afce72349680c8e8b6fdcfaf2b65a",interactive=True, visible=False)
             
             tts_coqui_languages = gr.Radio(
@@ -113,32 +113,32 @@ with gr.Blocks() as app:
                 visible=False
             )
             
-            tts_btn = gr.Button(value="Convertir")
+            tts_btn = gr.Button(value="Convert")
                 
             with gr.Row():
-                tts_vc_output1 = gr.Textbox(label="Salida")
-                tts_vc_output2 = gr.Audio(label="Audio de salida")   
+                tts_vc_output1 = gr.Textbox(label="Exit")
+                tts_vc_output2 = gr.Audio(label="Output Audio")   
             
         tts_btn.click(fn=tts_infer, inputs=[tts_text, tts_model_url, tts_method, tts_model, tts_api_key, tts_coqui_languages], outputs=[tts_vc_output1, tts_vc_output2])
         
-        tts_msg = gr.Markdown("""**Recomiendo que te crees una cuenta de eleven labs y pongas tu clave de api, es gratis y tienes 10k caracteres de limite al mes.** <br/>
+        tts_msg = gr.Markdown("""**recommend that you create an Eleven Labs account and enter your API key, it's free and you have a limit of 10k characters per month.** <br/>
                 ![Imgur](https://imgur.com/HH6YTu0.png)
                 """, visible=False)
         
         tts_method.change(fn=update_tts_methods_voice, inputs=[tts_method], outputs=[tts_model, tts_msg, tts_api_key, tts_coqui_languages])
     
     with gr.TabItem("Youtube"):
-        gr.Markdown("## Convertir video de Youtube a audio")
+        gr.Markdown("## Convert video Youtube to audio")
         with gr.Row():
             yt_url = gr.Textbox(
-                label="Url del video:",
-                placeholder="https://www.youtube.com/watch?v=3vEiqil5d3Q"
+                label="Url video:",
+                placeholder="https://youtu.be/iN0-dRNsmRM?si=42PgawH73GIrvYLs"
             )
-        yt_btn = gr.Button(value="Convertir")
+        yt_btn = gr.Button(value="Convert")
                 
         with gr.Row():
-            yt_output1 = gr.Textbox(label="Salida")
-            yt_output2 = gr.Audio(label="Audio de salida")   
+            yt_output1 = gr.Textbox(label="Exit")
+            yt_output2 = gr.Audio(label="Output Audio")   
             
         yt_btn.click(fn=convert_yt_to_wav, inputs=[yt_url], outputs=[yt_output1, yt_output2])
          
@@ -224,5 +224,5 @@ with gr.Blocks() as app:
 
     
     
-    app.queue(concurrency_count=200, max_size=1022).launch()
+    app.queue(concurrency_count=200, max_size=1022).launch(debug=True, Share=True)
     #share=True
