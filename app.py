@@ -43,7 +43,7 @@ def convert_yt_to_wav(url):
     except Exception as e:
         return str(e), None
     
-with gr.Blocks(theme='Hev832/EasyAndCool') as app:
+with gr.Blocks(theme='Hev832/emerald', title='Simple RVC') as app:
     gr.HTML("<h1> Simple RVC Inference Juuxn X Blane 💻 </h1>")
     
     
@@ -151,7 +151,7 @@ with gr.Blocks(theme='Hev832/EasyAndCool') as app:
         
         
     with gr.Tab("models"):
-        gr.HTML("<h4>dowoad models</h4>")
+        gr.HTML("<h4>download models</h4>")
         search_name = gr.Textbox(placeholder="Billie Eillish (RVC v2 - 100 epoch)", label="Nombre", show_label=True)
          # Salida
         with gr.Row():
@@ -226,4 +226,4 @@ with gr.Blocks(theme='Hev832/EasyAndCool') as app:
     
     
     #share=True
-app.queue(concurrency_count=200, max_size=1022).launch(share=True)
+app.launch(share=True)
